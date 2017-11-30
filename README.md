@@ -19,16 +19,16 @@ fx is a tool to help you do Function as a Service on your own server. fx can mak
 | Node          | Supported     | fx            |
 | Python        | Supported     | fx            |
 | Ruby          | Supported     | fx            |
+| Java          | Supported     | fx            |
 | PHP           | Supported     | [@chlins](https://github.com/chlins)|
 | Julia         | Supported     | [@mbesancon](https://github.com/mbesancon)|
-| Java          | No            | |
-| Scala         | No            | |
+| R             | Working on [need your help](https://github.com/metrue/fx/issues/31)   | |
+| Scala         | Working on     | |
 | Perl          | Working on    | |
 | .Net          | Working on    | |
-| R             | Working on    | |
 | Rust          | Working on    | |
 
-tweet [@_metrue](https://twitter.com/_metrue) or issue is welcome.
+Welcome to tweet [me](https://twitter.com/_metrue) or [Buy me a coffee](https://www.paypal.me/minghe)
 
 ### Usage
 
@@ -109,6 +109,21 @@ func Fx(input *Input) (output *Output) {
 def fx(input)
     return input['a'] + input['b']
 end
+```
+
+* Java
+```
+package fx;
+
+import org.json.JSONObject;
+
+public class Fx {
+    public int handle(JSONObject input) {
+        String a = input.get("a").toString();
+        String b = input.get("b").toString();
+        return Integer.parseInt(a) + Integer.parseInt(b);
+    }
+}
 ```
 
 * Python
