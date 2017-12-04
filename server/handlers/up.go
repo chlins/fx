@@ -28,7 +28,7 @@ var funcNames = map[string]string{
 	"python": "/fx.py",
 	"php":    "/fx.php",
 	"julia":  "/fx.jl",
-	"java": "/src/main/java/fx/Fx.java",
+	"java":   "/src/main/java/fx/Fx.java",
 }
 
 func dispatchFuncion(lang string, data []byte, dir string) {
@@ -61,15 +61,26 @@ func initWorkDirectory(lang string, dir string) {
 	}
 }
 
+func cleanup(dir string) {
+	if err := os.RemoveAll(dir); err != nil {
+		log.Printf("cleanup [%s] error: %s\n", dir, err.Error())
+	}
+	dirTar := dir + ".tar"
+	if err := os.RemoveAll(dirTar); err != nil {
+		log.Printf("cleanup [%s] error: %s\n", dirTar, err.Error())
+	}
+}
+
 // Up spins up a new function
 func Up(lang []byte, body []byte, connection *websocket.Conn, messageType int) {
-	var guid = xid.New().String()
-	var dir = guid
-	var name = guid
 	port, err := freeport.GetFreePort()
 	if err != nil {
 		panic(err)
 	}
+	var guid = xid.New().String()
+	var dir = path.Join(os.TempDir(), "fx-", guid)
+	defer cleanup(dir)
+	var name = guid
 	initWorkDirectory(string(lang), dir)
 	notify(connection, messageType, "work dir initialized")
 	dispatchFuncion(string(lang), body, dir)

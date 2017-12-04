@@ -12,6 +12,7 @@ import (
 
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -41,6 +42,7 @@ func Build(name string, dir string) {
 	buildOptions := types.ImageBuildOptions{
 		Dockerfile: "Dockerfile", // optional, is the default
 		Tags:       []string{name},
+		Labels:     map[string]string{"fx": ""},
 	}
 	buildResponse, buildErr := cli.ImageBuild(context.Background(), dockerBuildContext, buildOptions)
 	if buildErr != nil {
@@ -57,6 +59,23 @@ func Build(name string, dir string) {
 			continue
 		}
 		fmt.Printf(info.Stream)
+	}
+}
+
+// Pull image from hub.docker.com
+func Pull(name string, verbose bool) {
+	ctx := context.Background()
+	cli, err := client.NewEnvClient()
+	if err != nil {
+		panic(err)
+	}
+
+	if r, pullErr := cli.ImagePull(ctx, name, types.ImagePullOptions{}); pullErr != nil {
+		panic(pullErr)
+	} else {
+		if verbose {
+			io.Copy(os.Stdout, r)
+		}
 	}
 }
 
@@ -104,4 +123,13 @@ func Stop(containerID string) (err error) {
 	timeout := time.Duration(1) * time.Second
 	err = cli.ContainerStop(context.Background(), containerID, &timeout)
 	return err
+}
+
+// Remove interrupts and remove a running container
+func Remove(containerID string) (err error) {
+	cli, err := client.NewEnvClient()
+	if err != nil {
+		return err
+	}
+	return cli.ContainerRemove(context.Background(), containerID, types.ContainerRemoveOptions{Force: true})
 }

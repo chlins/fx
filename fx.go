@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/metrue/fx/commands/down"
-	"github.com/metrue/fx/commands/list"
-	"github.com/metrue/fx/commands/up"
+	"github.com/metrue/fx/commands"
 	"github.com/metrue/fx/server"
 )
 
@@ -17,7 +15,7 @@ const usage = `Usage:
   $ fx up   func1 func2 ...       deploy a function or a group of functions
   $ fx down func1 func2 ...       destroy a function or a group of functions
   $ fx list                       list deployed services
-  $ fx serve                     manage fx server
+  $ fx serve                      manage fx server
   $ fx --version                  show current version of f(x)
 `
 
@@ -37,6 +35,7 @@ func checkFlag() {
 		false,
 		"Help information.",
 	)
+
 	versionPtr := flag.Bool(
 		"version",
 		false,
@@ -63,11 +62,11 @@ func main() {
 	case "serve":
 		server.Start()
 	case "up":
-		up.Up()
+		commands.Up()
 	case "down":
-		down.Down()
+		commands.Down()
 	case "list":
-		list.List()
+		commands.List()
 	default:
 		fmt.Print(usage)
 		os.Exit(1)
