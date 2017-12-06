@@ -26,7 +26,6 @@ func up(w http.ResponseWriter, r *http.Request) {
 		log.Print("upgrade: ", err)
 	}
 
-	log.Println("to up")
 	defer c.Close()
 
 	_, lang, err := c.ReadMessage()
@@ -106,20 +105,14 @@ func down(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var ids []string
-	if string(message) == "*" {
-		fmt.Println("end all")
-		containers := handlers.List()
-		ids = make([]string, len(containers))
-		for i, container := range containers {
-			ids[i] = container.ID[:10]
-		}
-	} else {
-		fmt.Println("end list")
-		ids = strings.Split(string(message), " ")
+	if msg := string(message); msg != "*" {
+		ids = strings.Split(msg, " ")
 	}
-
-	for _, id := range ids {
-		go handlers.Down(id, msgCh, doneCh)
+	containers := handlers.List(ids...)
+	count := len(containers)
+	for _, container := range containers {
+		ids = append(ids, container.ID)
+		go handlers.Down(container.ID[:10], container.Image, msgCh, doneCh)
 	}
 
 	numSuccess := 0
@@ -137,7 +130,7 @@ func down(w http.ResponseWriter, r *http.Request) {
 				numFail++
 			}
 
-			if numSuccess+numFail == len(ids) {
+			if numSuccess+numFail == count {
 				res := fmt.Sprintf("Succed: %d", numSuccess)
 				c.WriteMessage(mt, []byte(res))
 				res = fmt.Sprintf("Failed: %d", numFail)
@@ -157,11 +150,11 @@ func closeConn(c *websocket.Conn, msg string) {
 }
 
 // Start parses input and launches the fx server in a blocking process
-func Start() {
+func Start(verbose bool) {
 	flag.Parse()
 	log.SetFlags(0)
 
-	env.Init(true)
+	env.Init(verbose)
 
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/up", up)
