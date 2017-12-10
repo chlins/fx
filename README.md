@@ -30,20 +30,39 @@ fx is a tool to help you do Function as a Service on your own server. fx can mak
 
 Welcome to tweet [me](https://twitter.com/_metrue) or [Buy me a coffee](https://www.paypal.me/minghe)
 
+### Installation
+
+* MacOS
+
+```
+brew tap metrue/homebrew-fx
+brew install fx
+```
+
+* Linux/Unix
+
+To install fx, you can use the [install script](https://github.com/metrue/fx/blob/master/bin/install.sh) using cURL:
+
+```
+curl -o- https://raw.githubusercontent.com/metrue/fx/master/bin/install.sh | bash
+```
+
+or Wget:
+
+```
+wget -qO- https://raw.githubusercontent.com/metrue/fx/master/bin/install.sh | bash
+```
+
+fx will be installed into /usr/local/bin, if fx not found after installation, you may need to checkout if `/usr/local/bin/fx` exists.
+sometimes you may need `source ~/.zshrc` or `source ~/.bashrc` to make fx available on $PAHT.
+
+* Window
+
+You can go the release page to [download](https://github.com/metrue/fx/releases) fx manually;
+
 ### Usage
 
-##### Requirements
-* Docker: make sure [Docker](https://docs.docker.com/engine/installation/) installed and running on your server.
-* dep: fx project uses [dep](https://github.com/golang/dep) to do the golang dependency management.
-
-##### Build and Run
-
-```
-$ git clone https://github.com/metrue/fx.git
-$ cd fx
-$ dep ensure
-$ go install ./
-```
+Make sure [Docker](https://docs.docker.com/engine/installation/) installed and running on your server first.
 
 * start server
 
@@ -70,6 +89,7 @@ curl -X POST <service url> -H "Content-Type: application/json" -d '{"a": 1, "b":
 ```
 
 of course you can do more.
+
 ```
 Usage:
 $ fx serve                                      start f(x) server
@@ -81,7 +101,7 @@ $ fx --version                                  show current version of f(x)
 
 #### How to write your function
 
-functions example with Go, Ruby, Python, Node, PHP.
+functions example with Go, Ruby, Python, Node, PHP, Java, Julia.
 
 * Go
 ```
@@ -159,7 +179,21 @@ fx = function(input::Input)
 end
 ```
 
-### Contributors
+### Contributing
+
+##### Requirements
+* Docker: make sure [Docker](https://docs.docker.com/engine/installation/) installed and running on your server.
+* dep: fx project uses [dep](https://github.com/golang/dep) to do the golang dependency management.
+
+##### Build and Run
+
+```
+$ git clone https://github.com/metrue/fx.git
+$ cd fx
+$ make install-deps && make build
+$ ./build/fx serve                      # start your fx server
+$ ./build/fx up func.js                 # deploy a function
+```
 
 Thank you to all the people who already contributed to fx!
 
