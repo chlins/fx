@@ -18,6 +18,7 @@ var funcNames = map[string]string{
 	"php":    "/fx.php",
 	"julia":  "/fx.jl",
 	"java":   "/src/main/java/fx/Fx.java",
+	"d":      "/fx.d",
 }
 
 var assetsMap = map[string][]string{
@@ -59,6 +60,12 @@ var assetsMap = map[string][]string{
 		"assets/dockerfiles/fx/ruby/app.rb",
 		"assets/dockerfiles/fx/ruby/fx.rb",
 	},
+	"d": {
+		"assets/dockerfiles/fx/d/Dockerfile",
+		"assets/dockerfiles/fx/d/app.d",
+		"assets/dockerfiles/fx/d/fx.d",
+		"assets/dockerfiles/fx/d/arsd/cgi.d",
+	},
 }
 
 func removePrefix(lang string, filename string) (name string) {
@@ -72,7 +79,7 @@ func isFxFuncSource(lang string, name string) (ret bool) {
 	return nameWithoutExt == "fx" || nameWithoutExt == "Fx" // Fx is for Java
 }
 
-//Get extract assets to file
+//Get Prepare a container base image and insert the function body
 func Get(dir string, lang string, body []byte) (err error) {
 	names := assetsMap[lang]
 	err = nil

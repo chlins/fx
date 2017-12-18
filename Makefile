@@ -2,16 +2,27 @@ OUTPUT_DIR=./build
 DIST_DIR=./dist
 
 install-deps:
+	# install protobuf and grpc
 	go get -u github.com/golang/protobuf/protoc-gen-go
 	go get -u github.com/golang/protobuf/protoc-gen-go
 	go get -u google.golang.org/grpc
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+	go get -u github.com/jteeuwen/go-bindata/...
 
+	mkdir -p ./tmp
+	git clone --depth 1 https://github.com/googleapis/googleapis.git tmp/googleapis
+
+	# install protoc
+	./bin/install_protoc.sh
+
+	# install the other dependencies
 	@dep ensure
 generate:
-	./bin/install_protoc.sh
-	@go generate ./api/fx.go
+	# generate gRPC related code
+	go generate ./api/fx.go
+	# bundle assert into binary
+	go-bindata -pkg common -o common/asset.go ./assets/dockerfiles/fx/...
 build: generate
 	go build -o ${OUTPUT_DIR}/fx fx.go
 cross:
