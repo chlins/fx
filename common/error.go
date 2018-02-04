@@ -1,11 +1,15 @@
 package common
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
-func CheckError(err error) bool {
-	if err != nil {
-		fmt.Println(err)
-		return true
-	}
-	return false
+func HandleError(err error) {
+	panic(err)
+}
+
+func HandleEnvError(err error) {
+	fmt.Println(err.Error())
+	os.Exit(0)
 }

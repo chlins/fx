@@ -23,6 +23,7 @@ fx is a tool to help you do Function as a Service on your own server. fx can mak
 | Java          | Supported     | fx            |
 | PHP           | Supported     | [@chlins](https://github.com/chlins)|
 | Julia         | Supported     | [@mbesancon](https://github.com/mbesancon)|
+| D             | Supported     | [@andre2007](https://github.com/andre2007)|
 | R             | Working on [need your help](https://github.com/metrue/fx/issues/31)   | |
 
 Welcome to tweet [me](https://twitter.com/_metrue) or [Buy me a coffee](https://www.paypal.me/minghe).
@@ -58,6 +59,9 @@ Thank you to all the people who already contributed to fx!
         </a>
         <a href="https://github.com/andre2007" target="_blank">
             <img alt="andre2007" src="https://avatars1.githubusercontent.com/u/1451047?s=50&v=4" width="50">
+        </a>
+        <a href="https://github.com/steventhanna" target="_blank">
+            <img alt="andre2007" src="https://avatars1.githubusercontent.com/u/2541678?s=50&v=4" width="50">
         </a>
     </tr>
   </tbody>
@@ -111,7 +115,7 @@ fx up ./examples/functions/func.js
 ```
 
 the function defined in *examples/functions/func.js* is quite simple, it calculates the sum of two numbers then returns:
-```
+```js
 module.exports = (input) => {
     return parseInt(input.a, 10) + parseInt(input.b, 10)
 }
@@ -135,10 +139,39 @@ $ fx --version                                  show current version of f(x)
 
 #### How to write your function
 
-functions example with Go, Ruby, Python, Node, PHP, Java, Julia.
+functions example with Node, Ruby, Python, PHP, Go, Java, Julia.
+
+* Node/JavaScript
+```js
+module.exports = (input) => {
+    return parseInt(input.a, 10) + parseInt(input.b, 10)
+}
+```
+
+
+* Ruby
+```ruby
+def fx(input)
+    return input['a'] + input['b']
+end
+```
+
+* Python
+```py
+def fx(input):
+    return input['a'] + input['b']
+```
+
+* PHP
+```php
+<?php
+    function Fx($input) {
+        return $input["a"]+$input["b"];
+    }
+```
 
 * Go
-```
+```go
 package main
 
 type Input struct {
@@ -158,15 +191,8 @@ func Fx(input *Input) (output *Output) {
 }
 ```
 
-* Ruby
-```
-def fx(input)
-    return input['a'] + input['b']
-end
-```
-
 * Java
-```
+```java
 package fx;
 
 import org.json.JSONObject;
@@ -180,29 +206,8 @@ public class Fx {
 }
 ```
 
-* Python
-```
-def fx(input):
-    return input['a'] + input['b']
-```
-
-* Node
-```
-module.exports = (input) => {
-    return parseInt(input.a, 10) + parseInt(input.b, 10)
-}
-```
-
-* PHP
-```
-<?php
-    function Fx($input) {
-        return $input["a"]+$input["b"];
-    }
-```
-
 * Julia
-```
+```julia
 struct Input
     a::Number
     b::Number
